@@ -4,11 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Stripe Checkout Sample</title>
+    <title>Checkout Page</title>
 
+    <link rel="stylesheet" href="css/view.css" />
     <link rel="stylesheet" href="css/normalize.css" />
     <link rel="stylesheet" href="css/global.css" />
-    <script src="https://js.stripe.com/v3/"></script>
   </head>
 
   <body>
@@ -16,16 +16,51 @@
       <div class="sr-main">
         <section class="container">
           <div>
-            <h1>Single photo</h1>
-            <h4>Purchase a Pasha original photo</h4>
+                        <h1>Форма оплаты</h1>
+                        <p>Введите данные для оплаты и нажмите "Оплатить"</p>
+            <!--h4>Purchase a Pasha original photo</h4>
             <div class="pasha-image">
-              <img src="https://picsum.photos/280/320?random=4" width="140" height="160" />
-            </div>
+              <img src="css/logo.png" />
+            </div-->
           </div>
 
-          <form action="/create-checkout-session.php" method="POST">
-            <button id="submit">Buy</button>
-          </form>
+                <form id="form_10984" class="appnitro"  method="POST" action="create-checkout-session.php">
+                                        <div class="form_description">
+                                                <img src="css/logo.png">
+                </div>
+                        <ul >
+
+                                        <li id="li_1" >
+                <label class="description" for="element_1">Сумма </label>
+                <span class="symbol">&#8364;</span>
+                <span>
+                        <input id="element_1_1" name="Amount2" class="element text currency" size="10" value="" type="text" required />
+                        <label for="element_1_1">Euros</label>
+                </span>
+                <span>
+                        <input id="element_1_2" name="Amount1" class="element text" size="2" maxlength="2" value="" type="text" required />
+                        <label for="element_1_2">Cents</label>
+                </span>
+
+                </li>           <li id="li_2" >
+                <label class="description" for="element_2">Номер заказа (автоматически) </label>
+                <div>
+                        <input id="element_2" name="OrderId" class="element text medium" type="text" maxlength="255" value="Будет сгенерирован автоматически" readonly />
+                </div>
+                </li>           <li id="li_3" >
+                <label class="description" for="element_3">Номер Диллера = Номер Клиента (например V014 = 000017)</label>
+                <div>
+                        <input id="element_3" name="Description" class="element text medium" type="text" maxlength="255" value="" required />
+                </div>
+                </li>
+
+                                        <li class="buttons">
+                            <input type="hidden" name="form_id" value="10984" />
+                                <input id="submit" class="button" type="submit" name="submit" value="Оплатить" />
+                </li>
+                        </ul>
+                </form>
+                <div id="footer">&copy; by <a href="http://pay2.2ego.de">2EGO</a> 2018 - 2023</div>
         </section>
       </div>
     </div>

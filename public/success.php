@@ -30,7 +30,7 @@ $_GET['session_id']
           <div class="sr-callout">
             <pre><?= json_encode($checkout_session, JSON_PRETTY_PRINT); ?></pre>
           </div>
-          <button onclick="window.location.href = '/';">Restart demo</button>
+          <button onclick="window.location.href = 'index.html';">Restart demo</button>
         </div>
       </div>
       <div class="sr-content">

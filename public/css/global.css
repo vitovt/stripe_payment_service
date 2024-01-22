@@ -126,7 +126,7 @@ input[type="number"] {
 }
 .sr-input:focus,
 input[type="text"]:focus,
-button:focus,
+.button:focus,
 .focused {
   box-shadow: 0 0 0 1px rgba(50, 151, 211, 0.3), 0 1px 1px 0 rgba(0, 0, 0, 0.07),
     0 0 0 4px rgba(50, 151, 211, 0.3);
@@ -259,7 +259,7 @@ input[type="number"]::placeholder {
 }
 
 /* Buttons and links */
-button {
+.button {
   background: var(--accent-color);
   border-radius: var(--radius);
   color: white;
@@ -271,14 +271,14 @@ button {
   transition: all 0.2s ease;
   display: block;
 }
-button:hover {
+.button:hover {
   filter: contrast(115%);
 }
-button:active {
+.button:active {
   transform: translateY(0px) scale(0.98);
   filter: brightness(0.9);
 }
-button:disabled {
+.button:disabled {
   opacity: 0.5;
   cursor: none;
 }
