@@ -9,18 +9,26 @@ $domain_url = $_ENV['DOMAIN'];
 
 if( isset($_POST) )
 {
-     $OrderId = (int)$_POST['OrderId'];
      $Amount = (int)$_POST['Amount1'] + (int)$_POST['Amount2'] * 100;
-     $Description = $_POST['Description'];
 }
 
 
-//$clint
+$products = $stripe->products->all(['limit' => 3]);
 
+//create custom price
 $price = $stripe->prices->create([
   'currency' => 'eur',
   'unit_amount' => $Amount,
-  'product_data' => ['name' => 'Payment for client number ' . $Description ],
+  //Which product to use: Select ONE option:
+
+  //1) Create product every time
+  //'product_data' => ['name' => 'Customer payment' ],
+
+  //2) Use predefined product
+  'product' =>  $_ENV['PRODUCT'],
+
+  //3) Get last created product
+  //'product' => $products->data[0]->id,
 ]);
 
 $price_id = $price->id;
