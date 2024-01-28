@@ -36,7 +36,7 @@ $checkout_session = $stripe->checkout->sessions->create([
     'price' => $price_id,
     'quantity' => 1,
   ]],
-    'custom_text' => [
+ /*   'custom_text' => [
         'submit' => [
             'message' => 'Пополнение баланса диллера: ' . $Description,
             // Custom message alongside the payment confirmation button
@@ -45,23 +45,23 @@ $checkout_session = $stripe->checkout->sessions->create([
             'message' => 'Спасибо за оплату!'
             // Add your custom message here, up to 1200 characters
         ],
-    ],
+ ],*/
     //'description' => 'Описание заказа',
     'custom_fields' => [
         [
-            'key' => 'dealer_id',
+            'key' => 'customer_num',
             'label' => [
-                'custom' => 'Dealer ID',
+                'custom' => 'Customer/Клиент/Клиенттік/Müştəri/ Nr',
                 'type' => 'custom'
             ],
             'type' => 'text',
             'text' => [
-                'maximum_length' => 7, // Set your desired maximum length
+                'maximum_length' => 21, // Set your desired maximum length
                 'minimum_length' => 1   // Set your desired minimum length
             ],
             'optional' => false // Set to true if the field is not mandatory
         ],
-        [
+        /*[
             'key' => 'client_id',
             'label' => [
                 'custom' => 'Client ID',
@@ -73,7 +73,7 @@ $checkout_session = $stripe->checkout->sessions->create([
                 'minimum_length' => 1   // Set your desired minimum length
             ],
             'optional' => false // Set to true if the field is not mandatory
-        ]
+	]*/
     ],
 ]);
 
