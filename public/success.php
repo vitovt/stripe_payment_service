@@ -28,33 +28,14 @@ $_GET['session_id']
         </div>
         <div class="sr-section completed-view">
           <div class="sr-callout">
-            <pre><?= json_encode($checkout_session, JSON_PRETTY_PRINT); ?></pre>
+            <!--pre><?= json_encode($checkout_session, JSON_PRETTY_PRINT); ?></pre-->
           </div>
-          <button onclick="window.location.href = 'index.html';">Restart demo</button>
+          <button type="submit" class="button" onclick="window.location.href = 'index.html';">Restart</button>
         </div>
       </div>
       <div class="sr-content">
         <div class="pasha-image-stack">
-          <img
-            src="https://picsum.photos/280/320?random=1"
-            width="140"
-            height="160"
-            />
-          <img
-            src="https://picsum.photos/280/320?random=2"
-            width="140"
-            height="160"
-            />
-          <img
-            src="https://picsum.photos/280/320?random=3"
-            width="140"
-            height="160"
-            />
-          <img
-            src="https://picsum.photos/280/320?random=4"
-            width="140"
-            height="160"
-            />
+         <img src="css/logo.png">
         </div>
       </div>
     </div>
