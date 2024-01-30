@@ -163,27 +163,37 @@ function copyToClipboard() {
     copyText.select();
     copyText.setSelectionRange(0, 99999); // For mobile devices
     document.execCommand("copy");
-    //alert("Ссылка скопирована");
 
     var backdrop = document.createElement("div");
     backdrop.className = "backdrop";
     document.body.appendChild(backdrop);
-    setTimeout(() => backdrop.style.opacity = '1', 10); // Fade in backdrop
+    setTimeout(() => backdrop.style.opacity = '1', 10);
 
     var notification = document.createElement("div");
     notification.className = "notification";
-    notification.textContent = "Ссылка скопирована";
+
+    var preloader = document.createElement("div");
+    preloader.className = "preloader";
+    notification.appendChild(preloader);
+
+    var text = document.createElement("div");
+    text.textContent = "Ссылка скопирована";
+    notification.appendChild(text);
+
     document.body.appendChild(notification);
 
+    // Start preloader animation
+    setTimeout(() => preloader.style.width = '0', 10);
+
+    // Fade out and remove notification and backdrop
     setTimeout(function() {
         notification.style.opacity = '0';
         backdrop.style.opacity = '0';
-    }, 2000);
-
-    setTimeout(function() {
-        document.body.removeChild(notification);
-        document.body.removeChild(backdrop);
-    }, 2500);
+        setTimeout(function() {
+            document.body.removeChild(notification);
+            document.body.removeChild(backdrop);
+        }, 500); // 500ms for fade out transition
+    }, 3000); // 3 seconds till close
 }
 </script>
 

@@ -617,11 +617,13 @@ input[type="number"]::-webkit-outer-spin-button {
     box-shadow: 0 4px 6px rgba(0,0,0,0.5);
     z-index: 1000; /* Above the backdrop */
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
     opacity: 1;
     transition: opacity 0.5s ease;
+    padding-top: 30px;
 }
 
 /* Responsive adjustments */
@@ -630,4 +632,17 @@ input[type="number"]::-webkit-outer-spin-button {
         padding: 10px;
         font-size: 14px; /* Adjust font size for smaller devices */
     }
+}
+
+.preloader {
+    height: 5px; /* Height of the preloader bar */
+    background-color: #007bff; /* Color of the preloader bar */
+    width: 100%; /* Start at full width */
+    transition: width 3s linear; /* Transition to 0 width over 3 seconds */
+    margin-bottom: 20px; /* Space below the preloader */
+}
+
+.notification div {
+    text-align: center;
+    width: 100%;
 }
