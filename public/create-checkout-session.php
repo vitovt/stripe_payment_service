@@ -147,6 +147,17 @@ if ($redirurl) {
       </div>
     </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var redirectUrl = '<?= $redirurl; ?>';
+        var submitButton = document.getElementById('submit');
+
+        submitButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            window.location.href = redirectUrl;
+        });
+    });
+
 function copyToClipboard() {
     var copyText = document.getElementById("urlField");
     copyText.select();
