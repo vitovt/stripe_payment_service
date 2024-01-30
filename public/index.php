@@ -51,7 +51,7 @@
                 </li>
                         </ul>
                 </form>
-                <div id="footer">&copy; by <a href="http://pay2.2ego.de">2EGO</a> 2018 - 2023</div>
+		<div id="footer">&copy; by <a href="">2EGO</a> 2018 - <?php echo date('Y'); ?></div>
         </section>
       </div>
     </div>
