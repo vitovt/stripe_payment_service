@@ -283,6 +283,26 @@ input[type="number"]::placeholder {
   cursor: none;
 }
 
+.smallbutton {
+    display: inline-block;
+    padding: 8px 15px; /* Adjust the padding to control the size */
+    margin: 5px;
+    border: 1px solid #007bff; /* Border color */
+    border-radius: 4px; /* Rounded corners */
+    background-color: #007bff; /* Background color */
+    color: white; /* Text color */
+    text-align: center;
+    text-decoration: none; /* Removes underline from the link */
+    font-size: 14px; /* Font size */
+    cursor: pointer; /* Cursor changes to hand icon */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.smallbutton:hover {
+    background-color: #0056b3; /* Slightly darker shade on hover */
+}
+
+
 .sr-payment-form button,
 .fullwidth {
   width: 100%;

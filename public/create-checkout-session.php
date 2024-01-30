@@ -129,6 +129,7 @@ if ($redirurl) {
         echo '<li>Номер заказа: <strong>' . $OrderId . '</strong></li>';
         echo '<li><a href="' . $redirurl  . '">Ссылка для оплаты</a> (можно передавать клиенту): </li>';
         echo '<li><input id="urlField" value="' . $redirurl . '" readonly>';
+        echo '<a class="smallbutton" onclick="copyToClipboard()">Copy</a></li>';
         echo "<li>Время действия ссылки: <strong> 24 часа </strong></li>";
         echo '<input id="submit" class="button" type="submit" name="submit" value="Оплатить сейчас" />';
         echo "<br>\n<br>\n";
@@ -145,6 +146,15 @@ if ($redirurl) {
         </section>
       </div>
     </div>
+
+function copyToClipboard() {
+    var copyText = document.getElementById("urlField");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); // For mobile devices
+    document.execCommand("copy");
+    //alert("Ссылка скопирована");
+}
+</script>
 
 </body>
 </html>
