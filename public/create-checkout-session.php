@@ -85,5 +85,59 @@ $checkout_session = $stripe->checkout->sessions->create([
     ],
 ]);
 
-header("HTTP/1.1 303 See Other");
-header("Location: " . $checkout_session->url);
+$redirurl =  $checkout_session->url;
+$transaction_id = $checkout_session->id;
+$expireddatetime = $checkout_session->expires_at;
+$expired = date("Y-m-d H:i:s", substr($expireddatetime, 0, 10));
+$OrderId = '123';
+?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Confirm payment</title>
+
+    <link rel="stylesheet" href="css/view.css" />
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="stylesheet" href="css/global.css" />
+  </head>
+  <body>
+    <div class="sr-root">
+      <div class="sr-main">
+        <section class="container">
+          <div>
+                        <h1>Подтверждение оплаты</h1>
+                        <p>Проверьте данные для оплаты и нажмите "Оплатить сейчас"</p>
+          </div>
+
+                                        <div class="form_description">
+                                                <img src="css/logo.png">
+                </div>
+<form>
+<?php
+if ($redirurl) {
+        echo '<ul>';
+        echo '<li>Номер заказа: <strong>' . $OrderId . '</strong></li>';
+        echo '<li><a href="' . $redirurl  . '">Ссылка для оплаты</a> (можно передавать клиенту): </li>';
+        echo '<li><input id="urlField" value="' . $redirurl . '" readonly>';
+        echo "<li>Время действия ссылки: <strong> 24 часа </strong></li>";
+        echo '<input id="submit" class="button" type="submit" name="submit" value="Оплатить сейчас" />';
+        echo "<br>\n<br>\n";
+        echo "Код для отслеживания оплаты (не передавать): <strong>" .  $OrderId . "</strong><br>";
+        echo "<li>Отследить оплату можно по ссылке: <a href='$domain_url/assert.php'>$domain_url/assert.php</a></li>";
+        echo '</ul>';
+} else {
+        echo "<p>Непредвиденная ошибка! Напишите в поддержку</p>";
+}
+
+?>
+</form>
+                <div id="footer">&copy; by <a href="http://pay2.2ego.de">2EGO</a> 2018 - <?php echo date('Y');?></div>
+        </section>
+      </div>
+    </div>
+
+</body>
+</html>
