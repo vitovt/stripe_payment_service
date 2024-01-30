@@ -153,6 +153,26 @@ function copyToClipboard() {
     copyText.setSelectionRange(0, 99999); // For mobile devices
     document.execCommand("copy");
     //alert("Ссылка скопирована");
+
+    var backdrop = document.createElement("div");
+    backdrop.className = "backdrop";
+    document.body.appendChild(backdrop);
+    setTimeout(() => backdrop.style.opacity = '1', 10); // Fade in backdrop
+
+    var notification = document.createElement("div");
+    notification.className = "notification";
+    notification.textContent = "Ссылка скопирована";
+    document.body.appendChild(notification);
+
+    setTimeout(function() {
+        notification.style.opacity = '0';
+        backdrop.style.opacity = '0';
+    }, 2000);
+
+    setTimeout(function() {
+        document.body.removeChild(notification);
+        document.body.removeChild(backdrop);
+    }, 2500);
 }
 </script>
 
