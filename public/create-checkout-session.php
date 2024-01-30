@@ -7,10 +7,29 @@ require_once 'shared.php';
 // flow.
 $domain_url = $_ENV['DOMAIN'];
 
-if( isset($_POST) )
-{
-    $Amount = (int)$_POST['Amount1'] + (int)$_POST['Amount2'] * 100;
-    $Description = $_POST['Description'];
+if (!empty($_POST)) {
+    // Sanitize and validate Amount1 and Amount2
+    $Amount1 = filter_input(INPUT_POST, 'Amount1', FILTER_SANITIZE_NUMBER_INT);
+    $Amount2 = filter_input(INPUT_POST, 'Amount2', FILTER_SANITIZE_NUMBER_INT);
+
+    // Validate if Amount1 and Amount2 are integers
+    if (filter_var($Amount1, FILTER_VALIDATE_INT) !== false && filter_var($Amount2, FILTER_VALIDATE_INT) !== false) {
+        // Calculate the total amount in cents
+        $Amount = (int)$Amount1 + (int)$Amount2 * 100;
+    } else {
+        // Handle the error if Amount1 or Amount2 are not valid integers
+        die('Invalid input for Amount1 or Amount2');
+    }
+
+    // Sanitize Description
+    $Description = filter_input(INPUT_POST, 'Description', FILTER_SANITIZE_STRING);
+
+    // Now, $Description is sanitized and can be safely used for further processing.
+    // Make sure to use prepared statements when inserting it into the database later.
+
+} else {
+    // Handle the case where $_POST is not set
+    die("Direct access is forbidden!");
 }
 
 
