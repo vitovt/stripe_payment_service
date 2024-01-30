@@ -9,7 +9,8 @@ $domain_url = $_ENV['DOMAIN'];
 
 if( isset($_POST) )
 {
-     $Amount = (int)$_POST['Amount1'] + (int)$_POST['Amount2'] * 100;
+    $Amount = (int)$_POST['Amount1'] + (int)$_POST['Amount2'] * 100;
+    $Description = $_POST['Description'];
 }
 
 
@@ -39,6 +40,10 @@ $checkout_session = $stripe->checkout->sessions->create([
   'success_url' => $domain_url . '/success.php?session_id={CHECKOUT_SESSION_ID}',
   'cancel_url' => $domain_url . '/canceled.html',
   'mode' => 'payment',
+  /*'client_reference_id' => 'VR007-test',
+  'metadata' => [
+     'naznachenie' => 'VQ008-test'
+  ],*/
   // 'automatic_tax' => ['enabled' => true],
   'line_items' => [[
     'price' => $price_id,
@@ -54,8 +59,10 @@ $checkout_session = $stripe->checkout->sessions->create([
             // Add your custom message here, up to 1200 characters
         ],
  ],*/
-    //'description' => 'Описание заказа',
-    'custom_fields' => [
+    'payment_intent_data' => [
+        'description' => $Description,
+    ],
+    /*'custom_fields' => [
         [
             'key' => 'customer_num',
             'label' => [
@@ -69,7 +76,7 @@ $checkout_session = $stripe->checkout->sessions->create([
             ],
             'optional' => false // Set to true if the field is not mandatory
         ],
-        /*[
+        [
             'key' => 'client_id',
             'label' => [
                 'custom' => 'Client ID',
@@ -81,8 +88,8 @@ $checkout_session = $stripe->checkout->sessions->create([
                 'minimum_length' => 1   // Set your desired minimum length
             ],
             'optional' => false // Set to true if the field is not mandatory
-	]*/
-    ],
+	]
+    ],*/
 ]);
 
 $redirurl =  $checkout_session->url;
