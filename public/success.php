@@ -54,7 +54,7 @@ $db->updateRecord($payment_status, $orderId);
         <section class="container">
           <div>
           <h1>Your payment succeeded</h1>
-          <h2>Оплата успешна</h2>
+          <h2 class="success">Оплата успешна</h2>
           </div>
 
                                         <div class="form_description">

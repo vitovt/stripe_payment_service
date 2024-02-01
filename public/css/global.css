@@ -646,3 +646,27 @@ input[type="number"]::-webkit-outer-spin-button {
     text-align: center;
     width: 100%;
 }
+
+.error {
+color: red;
+}
+
+.warning {
+color: yellow;
+}
+
+.success {
+color: green;
+}
+
+.unknown {
+color: gray;
+}
+
+.status {
+font-family: 'Courier New', Courier, monospace;
+}
+
+.statuscode {
+font-weight: bold;
+}
