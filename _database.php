@@ -49,7 +49,7 @@ class Database
 
     public function addRecord()
     {
-        $query = "INSERT INTO orders (token, created, updated) VALUES (?, NOW(), NOW());";
+        $query = "INSERT INTO orders (token) VALUES (?);"; // Let MySQL handle `created` and `updated`
         $stmt = $this->pdo->prepare($query);
         $stmt->execute(['']);
         return $this->pdo->lastInsertId();
@@ -57,14 +57,14 @@ class Database
 
     public function addToken($token, $id)
     {
-        $query = "UPDATE orders SET token = ?, updated = NOW() WHERE id = ?;";
+        $query = "UPDATE orders SET token = ? WHERE id = ?;"; // `updated` will be auto-updated by MySQL
         $stmt = $this->pdo->prepare($query);
         $stmt->execute([$token, $id]);
     }
 
     public function updateRecord($id, $status)
     {
-        $query = "UPDATE orders SET payment_status = ?, updated = NOW() WHERE id = ?;";
+        $query = "UPDATE orders SET payment_status = ? WHERE id = ?;"; // `updated` will be auto-updated by MySQL
         $stmt = $this->pdo->prepare($query);
         $stmt->execute([$status, $id]);
     }
