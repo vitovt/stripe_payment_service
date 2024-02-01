@@ -11,19 +11,19 @@ $db = new Database();
 $orderId = $db->addRecord();
 
 if (!empty($_POST)) {
-    // Sanitize and validate Amount1 and Amount2
-    $Amount1 = filter_input(INPUT_POST, 'Amount1', FILTER_SANITIZE_NUMBER_INT);
-    $Amount2 = filter_input(INPUT_POST, 'Amount2', FILTER_SANITIZE_NUMBER_INT);
+    // Sanitize and validate Amount2 and Amount1
+    $Amount2 = filter_input(INPUT_POST, 'Amount2', FILTER_SANITIZE_STRING);
+    $Amount1 = filter_input(INPUT_POST, 'Amount1', FILTER_SANITIZE_STRING);
 
-    // Validate if Amount1 and Amount2 are integers
-    if (filter_var($Amount1, FILTER_VALIDATE_INT) !== false && filter_var($Amount2, FILTER_VALIDATE_INT) !== false) {
-        // Calculate the total amount in cents
-        $Amount = (int)$Amount1 + (int)$Amount2 * 100;
+    if (is_numeric($Amount2) && ctype_digit($Amount2) && (int)$Amount2 >= 0 &&
+        is_numeric($Amount1) && ctype_digit($Amount1) && (int)$Amount1 < 100 && (int)$Amount1 >= 0) {
+        // Convert strings to integers and calculate the total amount in cents
+        $Amount = (int)$Amount2 * 100 + (int)$Amount1;
     } else {
-        // Handle the error if Amount1 or Amount2 are not valid integers
-        die('Invalid input for Amount1 or Amount2');
+        // Handle the error if Amount2 or Amount1 are not valid integers, 
+        // if Amount1 is greater than 99, or if any value is negative
+        die('WRONG NUMBER of Euro! <a href="javascript:history.back()">Go back</a>');
     }
-
     // Sanitize Description
     $Description = filter_input(INPUT_POST, 'Description', FILTER_SANITIZE_STRING);
 

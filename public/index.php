@@ -34,11 +34,11 @@
                         <label for="element_1_1">Euros</label>
                 </span>
                 <span>
-                        <input id="element_1_2" name="Amount1" class="element text" size="2" maxlength="2" value="" size="2" maxlength="2" type="number" min="0" max="99" step="1" required />
+                        <input id="element_1_2" name="Amount1" class="element text currency" size="3" value="" type="number" min="0" max="199" step="1" required />
                         <label for="element_1_2">Cents</label>
                 </span>
                 </li>
-                <li id="li_2" >
+                <li id="li_2" ><p>Customer/Клиент/Клиенттік/Müştəri/ Nr</p>
 			<label class="description" for="element_3">Номер Диллера = Номер Клиента<br/> (например V014 = 000017)</label>
                 <div>
                         <input id="element_3" name="Description" class="element text medium" type="text" maxlength="255" placeholder="V014 = 000017" value="" required />
