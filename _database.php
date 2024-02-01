@@ -62,7 +62,7 @@ class Database
         $stmt->execute([$token, $id]);
     }
 
-    public function updateRecord($id, $status)
+    public function updateRecord($status, $id)
     {
         $query = "UPDATE orders SET payment_status = ? WHERE id = ?;"; // `updated` will be auto-updated by MySQL
         $stmt = $this->pdo->prepare($query);
@@ -90,10 +90,10 @@ class Database
 
 // Usage
 // $db = new Database();
-// $lastId = $db->addRecord('your_token_here');
-// $db->addToken('new_token', $lastId);
-// $db->updateRecord($lastId, 'Paid');
-// $id = $db->getId('your_token_here');
+// $lastId = $db->addRecord();
+// $db->addToken('token', $lastId);
+// $db->updateRecord('Paid', $lastId);
+// $id = $db->getId('token');
 // $token = $db->getToken($id);
 
 ?>
