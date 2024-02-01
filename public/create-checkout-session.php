@@ -1,11 +1,14 @@
 <?php
 require_once 'shared.php';
+require_once '../_database.php';
 
 // This is the root of the URL and includes the scheme. It usually looks like
 // `http://localhost:4242`. This is used when constructing the fully qualified
 // URL where the user will be redirected to after going through the payment
 // flow.
 $domain_url = $_ENV['DOMAIN'];
+$db = new Database();
+$orderId = $db->addRecord();
 
 if (!empty($_POST)) {
     // Sanitize and validate Amount1 and Amount2
@@ -113,9 +116,14 @@ $checkout_session = $stripe->checkout->sessions->create([
 
 $redirurl =  $checkout_session->url;
 $transaction_id = $checkout_session->id;
+$payment_status = $checkout_session->payment_status;
 $expireddatetime = $checkout_session->expires_at;
 $expired = date("Y-m-d H:i:s", substr($expireddatetime, 0, 10));
-$OrderId = '123';
+
+
+$db->addToken($transaction_id, $orderId);
+$db->updateRecord($payment_status, $orderId);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -145,14 +153,14 @@ $OrderId = '123';
 <?php
 if ($redirurl) {
         echo '<ul>';
-        echo '<li>Номер заказа: <strong>' . $OrderId . '</strong></li>';
+        echo '<li>Номер заказа: <strong>' . $orderId . '</strong></li>';
         echo '<li><a href="' . $redirurl  . '">Ссылка для оплаты</a> (можно передавать клиенту): </li>';
         echo '<li><input id="urlField" value="' . $redirurl . '" readonly>';
         echo '<a class="smallbutton" onclick="copyToClipboard()">Copy</a></li>';
         echo "<li>Время действия ссылки: <strong> 24 часа </strong></li>";
         echo '<input id="submit" class="button" type="submit" name="submit" value="Оплатить сейчас" />';
         echo "<br>\n<br>\n";
-        echo "Код для отслеживания оплаты (не передавать): <strong>" .  $OrderId . "</strong><br>";
+        echo "Код для отслеживания оплаты (не передавать): <strong>" .  $orderId . "</strong><br>";
         echo "<li>Отследить оплату можно по ссылке: <a href='$domain_url/assert.php'>$domain_url/assert.php</a></li>";
         echo '</ul>';
 } else {
