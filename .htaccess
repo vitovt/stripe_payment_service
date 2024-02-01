@@ -1,0 +1,25 @@
+# Turn on RewriteEngine
+RewriteEngine On
+
+# Redirect all traffic to 'public' folder
+#RewriteCond %{REQUEST_URI} !^/public/
+#RewriteRule ^(.*)$ /public/$1 [L]
+
+# Deny access to .git directory
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^\.git - [F,L]
+</IfModule>
+
+# Alternatively, use RedirectMatch to deny access to .git directory
+RedirectMatch 404 /\.git
+
+# Deny access to sensitive files
+<FilesMatch "^(\.env|composer\.json|composer\.lock|README\.md|\.gitignore)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Disable directory listings
+Options -Indexes
+
