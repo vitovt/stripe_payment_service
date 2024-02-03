@@ -1,7 +1,7 @@
-# Accept payments with Stripe Checkout using PHP
+# Accept payments with Stripe Checkout using standalone from
 
-This server example contains both the client and server bits required for
-setting up a Checkout integration.
+This app use Stripe PHP framework from examples and simple html form.
+Also it tracks all payments in mysql database.
 
 ## Requirements
 
@@ -11,38 +11,11 @@ setting up a Checkout integration.
 
 1. Confirm `.env` configuration
 
-Copy `.env.example` from the root to `.env` in this server directory, replace with your Stripe API keys:
+Copy `.env.sample` to `.env` in this server directory, replace with your Stripe API keys:
 
 ```sh
-cp .env.example .env
+cp .env.sample .env
 ```
-
-This sample requires a Price ID in the `price` config variable.
-
-Confirm `price` is set equal to the ID of a Price from your
-Stripe account. It should look something like:
-
-```
-PRICE=price_12345
-```
-
-Note that `price_12345` is a placeholder and the sample will not work with that
-price ID. You can [create a price](https://stripe.com/docs/api/prices/create)
-from the dashboard or with the Stripe CLI.
-
-<details>
-<summary>Enabling Stripe Tax</summary>
-
-   In the [`create-checkout-session.php`](./public/create-checkout-session.php) file you will find the following code commented out
-   ```php
-   // 'automatic_tax' => ['enabled' => true],
-   ```
-
-   Uncomment this line of code and the sales tax will be automatically calculated during the checkout.
-
-   Make sure you previously went through the set up of Stripe Tax: [Set up Stripe Tax](https://stripe.com/docs/tax/set-up) and you have your products and prices updated with tax behavior and optionally tax codes: [Docs - Update your Products and Prices](https://stripe.com/docs/tax/checkout#product-and-price-setup)
-</details>
-
 2. Install dependencies with composer
 
 From the directory that contains composer.json, run:
@@ -60,4 +33,4 @@ cd public
 php -S localhost:4242
 ```
 
-4. Go to `localhost:4242` to see the demo.
+3.1. Or use external web-server with php (apache2, nginx)
