@@ -16,7 +16,7 @@ if (isset($_GET['session_id'])) {
     die("Direct access is not allowed.");
 }
 
-require_once 'shared.php';
+require_once '../_shared.php';
 require_once '../_database.php';
 
 $db = new Database();

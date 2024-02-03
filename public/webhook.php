@@ -1,7 +1,7 @@
 <?php
 // For more information about Stripe webhooks, take a look at the official
 // documentation: https://stripe.com/docs/webhooks/build.
-require_once 'shared.php';
+require_once '../_shared.php';
 
 // If this request is a POST request, then deserialize the input.
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

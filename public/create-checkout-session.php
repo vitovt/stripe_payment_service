@@ -1,5 +1,5 @@
 <?php
-require_once 'shared.php';
+require_once '../_shared.php';
 require_once '../_database.php';
 
 // This is the root of the URL and includes the scheme. It usually looks like

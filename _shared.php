@@ -1,13 +1,13 @@
 <?php
 // Import the third party libraries, including stripe-php, which are managed by
 // composer.
-require '../vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 // If the .env file was not configured properly, display a helpful message.
-if(!file_exists('../.env')) {
+if(!file_exists(__DIR__ . '/.env')) {
   http_response_code(400);
   ?>
-  <p>Make a copy of <code>.env.example</code>, place it in the same directory as composer.json, and name it <code>.env</code>, then populate the variables.</p>
+  <p>Make a copy of <code>.env.sample</code>, place it in the same directory as composer.json, and name it <code>.env</code>, then populate the variables.</p>
   <p>It should look something like the following, but contain your <a href='https://dashboard.stripe.com/test/apikeys'>API keys</a>:</p>
   <pre>STRIPE_PUBLISHABLE_KEY=pk_test...
 STRIPE_SECRET_KEY=sk_test...
@@ -17,13 +17,13 @@ DOMAIN=http://localhost:4242</pre>
   <hr>
 
   <p>You can use this command to get started:</p>
-  <pre>cp .env.example .env</pre>
+  <pre>cp .env.sample .env</pre>
 
   <?php
   exit;
 }
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '');
 $dotenv->load();
 
 // Make sure the configuration file is good.
@@ -32,7 +32,7 @@ if (!$_ENV['STRIPE_SECRET_KEY']) {
   ?>
 
   <h1>Invalid <code>.env</code></h1>
-  <p>Make a copy of <code>.env.example</code>, place it in the same directory as composer.json, and name it <code>.env</code>, then populate the variables.</p>
+  <p>Make a copy of <code>.env.sample</code>, place it in the same directory as composer.json, and name it <code>.env</code>, then populate the variables.</p>
   <p>It should look something like the following, but contain your <a href='https://dashboard.stripe.com/test/apikeys'>API keys</a>:</p>
   <pre>STRIPE_PUBLISHABLE_KEY=pk_test...
 STRIPE_SECRET_KEY=sk_test...
@@ -44,7 +44,7 @@ DOMAIN=http://localhost:4242</pre>
   <hr>
 
   <p>You can use this command to get started:</p>
-  <pre>cp .env.example .env</pre>
+  <pre>cp .env.sample .env</pre>
 
   <?php
   exit;
@@ -60,7 +60,7 @@ if (!$price || $price == 'price_12345...') {
   ?>
 
   <h1>Missing price ID in <code>.env</code></h1>
-  <p>Make a copy of <code>.env.example</code>, place it in the same directory as composer.json, and name it <code>.env</code>, then populate the variables.</p>
+  <p>Make a copy of <code>.env.sample</code>, place it in the same directory as composer.json, and name it <code>.env</code>, then populate the variables.</p>
   <p>It should look something like the following, but contain your <a href='https://dashboard.stripe.com/test/apikeys'>API keys</a>:</p>
   <pre>STRIPE_PUBLISHABLE_KEY=pk_test...
 STRIPE_SECRET_KEY=sk_test...

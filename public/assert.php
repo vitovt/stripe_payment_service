@@ -1,5 +1,5 @@
 <?php
-require_once 'shared.php';
+require_once '../_shared.php';
 require_once '../_database.php';
 
 $db = new Database();
