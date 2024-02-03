@@ -34,7 +34,7 @@
                         <label for="element_1_1">Euros</label>
                 </span>
                 <span>
-                        <input id="element_1_2" name="Amount1" class="element text currency" size="3" value="" type="number" min="0" max="199" step="1" required />
+                        <input id="element_1_2" name="Amount1" class="element text currency" size="3" value="" type="number" min="0" max="99" step="1" required />
                         <label for="element_1_2">Cents</label>
                 </span>
                 </li>
