@@ -1,39 +1,14 @@
 <?php
-require_once '../_shared.php';
-require_once '../_database.php';
-
-$db = new Database();
-
+require_once '../_payment.php';
 $message = '';
-$statusCode = 'null';
+
 if (!empty($_POST)) {
     $orderId = filter_input(INPUT_POST, 'orderid', FILTER_SANITIZE_NUMBER_INT);
+    $payment = new Payment($stripe);
 
-        if($orderId > 0 && $orderId < 12799999) {
-            $message = "<p>Номер заказа: <strong>$orderId</strong></p>";
-            $sessionId = $db->getToken($orderId);
-            if($sessionId) {
-                $checkout_session = $stripe->checkout->sessions->retrieve($sessionId);
-                $payment_status = $checkout_session->payment_status;
-                if($payment_status == 'paid') {
-                    $statusstyle='class="success"';
-                } elseif($payment_status == 'unpaid') {
-                    $statusstyle='class="error"';
-                } else {
-                    $statusstyle='class="unknown"';
-                }
-                $message .= "<h2 class=\"success\">Статус заказа: <span $statusstyle>$payment_status</span></h2>"; 
-                $statusCode = $payment_status;
-            } else {
-                $message .= "<h2 class=\"warning\">Номер заказа не существует</h2>";
-                $statusCode = 'order-not-found';
-            }
-        } else {
-            $message = "<p>Номер заказа: <strong>Не определен</strong></p>";
-	    $message .= "<h2 class=\"error\">Введите корректный номер заказа</h2>";
-            $statusCode = 'invalid-order-number';
-	}
-    $message .= "<p><span class=\"status\">Status: <span class=\"statuscode\">$statusCode</span></p><span>";
+    $result = $payment->checkPayment($orderId);
+
+    $message = $result['message'];
 }
 ?>
 
