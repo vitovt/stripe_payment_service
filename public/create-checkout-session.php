@@ -1,29 +1,11 @@
 <?php
-require_once '../_shared.php';
-require_once '../_database.php';
-
-// This is the root of the URL and includes the scheme. It usually looks like
-// `http://localhost:4242`. This is used when constructing the fully qualified
-// URL where the user will be redirected to after going through the payment
-// flow.
-$domain_url = $_ENV['DOMAIN'];
-$db = new Database();
-$orderId = $db->addRecord();
+require_once '../_payment.php';
 
 if (!empty($_POST)) {
     // Sanitize and validate Amount2 and Amount1
     $Amount2 = filter_input(INPUT_POST, 'Amount2', FILTER_SANITIZE_STRING);
     $Amount1 = filter_input(INPUT_POST, 'Amount1', FILTER_SANITIZE_STRING);
 
-    if (is_numeric($Amount2) && ctype_digit($Amount2) && (int)$Amount2 >= 0 &&
-        is_numeric($Amount1) && ctype_digit($Amount1) && (int)$Amount1 < 100 && (int)$Amount1 >= 0) {
-        // Convert strings to integers and calculate the total amount in cents
-        $Amount = (int)$Amount2 * 100 + (int)$Amount1;
-    } else {
-        // Handle the error if Amount2 or Amount1 are not valid integers, 
-        // if Amount1 is greater than 99, or if any value is negative
-        die('WRONG NUMBER of Euro! <a href="javascript:history.back()">Go back</a>');
-    }
     // Sanitize Description
     $Description = filter_input(INPUT_POST, 'Description', FILTER_SANITIZE_STRING);
 
@@ -35,94 +17,19 @@ if (!empty($_POST)) {
     die("Direct access is forbidden!");
 }
 
+    $payment = new Payment($stripe);
+    $result = $payment->createPayment($Amount1, $Amount2, $Description);
 
-$products = $stripe->products->all(['limit' => 3]);
+    if (array_key_exists('error', $result)) {
+        die($result['error'] . ' <a href="javascript:history.back()">Go back</a>');
+    }
 
-//create custom price
-$price = $stripe->prices->create([
-  'currency' => 'eur',
-  'unit_amount' => $Amount,
-  //Which product to use: Select ONE option:
-
-  //1) Create product every time
-  //'product_data' => ['name' => 'Customer payment' ],
-
-  //2) Use predefined product
-  'product' =>  $_ENV['PRODUCT'],
-
-  //3) Get last created product
-  //'product' => $products->data[0]->id,
-]);
-
-$price_id = $price->id;
-
-// Create new Checkout Session for the order
-// ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
-$checkout_session = $stripe->checkout->sessions->create([
-  'success_url' => $domain_url . '/success.php?session_id={CHECKOUT_SESSION_ID}',
-  'cancel_url' => $domain_url . '/canceled.html',
-  'mode' => 'payment',
-  /*'client_reference_id' => 'VR007-test',
-  'metadata' => [
-     'naznachenie' => 'VQ008-test'
-  ],*/
-  // 'automatic_tax' => ['enabled' => true],
-  'line_items' => [[
-    'price' => $price_id,
-    'quantity' => 1,
-  ]],
- /*   'custom_text' => [
-        'submit' => [
-            'message' => 'Пополнение баланса диллера: ' . $Description,
-            // Custom message alongside the payment confirmation button
-        ],
-        'after_submit' => [
-            'message' => 'Спасибо за оплату!'
-            // Add your custom message here, up to 1200 characters
-        ],
- ],*/
-    'payment_intent_data' => [
-        'description' => $Description,
-    ],
-    /*'custom_fields' => [
-        [
-            'key' => 'customer_num',
-            'label' => [
-                'custom' => 'Customer/Клиент/Клиенттік/Müştəri/ Nr',
-                'type' => 'custom'
-            ],
-            'type' => 'text',
-            'text' => [
-                'maximum_length' => 21, // Set your desired maximum length
-                'minimum_length' => 1   // Set your desired minimum length
-            ],
-            'optional' => false // Set to true if the field is not mandatory
-        ],
-        [
-            'key' => 'client_id',
-            'label' => [
-                'custom' => 'Client ID',
-                'type' => 'custom'
-            ],
-            'type' => 'text',
-            'text' => [
-                'maximum_length' => 20, // Set your desired maximum length
-                'minimum_length' => 1   // Set your desired minimum length
-            ],
-            'optional' => false // Set to true if the field is not mandatory
-	]
-    ],*/
-]);
-
-$redirurl =  $checkout_session->url;
-$transaction_id = $checkout_session->id;
-$payment_status = $checkout_session->payment_status;
-$expireddatetime = $checkout_session->expires_at;
-$expired = date("Y-m-d H:i:s", substr($expireddatetime, 0, 10));
+    $orderId = $result['orderId'];
+    $redirurl = $result['redirurl'];
+    $domain_url = $_ENV['DOMAIN']; 
 
 
-$db->addToken($transaction_id, $orderId);
-$db->updateRecord($payment_status, $orderId);
+
 
 ?>
 <!DOCTYPE html>
