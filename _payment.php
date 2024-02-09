@@ -65,7 +65,7 @@ class Payment {
                 ],
          ],*/
             'payment_intent_data' => [
-                'description' => $Description,
+                'description' => $orderId,
             ],
             /*'custom_fields' => [
                 [
@@ -98,7 +98,8 @@ class Payment {
       ]);
 
         $this->db->addToken($checkout_session->id, $orderId);
-        $this->db->updateRecord($checkout_session->payment_status, $orderId);
+        $this->db->updateRecordStatus($checkout_session->payment_status, $orderId);
+        $this->db->updateRecordDescription($Description, $orderId);
         
         $redirurl =  $checkout_session->url;
         $transaction_id = $checkout_session->id;
@@ -116,6 +117,7 @@ class Payment {
     public function checkPayment($orderId) {
         $message = '';
         $statusCode = 'null';
+        $description = '';
 
         if ($orderId > 0 && $orderId < 12799999) {
             $message = "<p>Номер заказа: <strong>$orderId</strong></p>";
@@ -127,6 +129,7 @@ class Payment {
                 $statusstyle = $this->getStatusStyle($payment_status);
                 $message .= "<h2 class=\"success\">Статус заказа: <span $statusstyle>$payment_status</span></h2>";
                 $statusCode = $payment_status;
+                $description = $this->db->getRecordDescription($orderId);
             } else {
                 $message .= "<h2 class=\"warning\">Номер заказа не существует</h2>";
                 $statusCode = 'order-not-found';
@@ -140,6 +143,7 @@ class Payment {
         return [
             'message' => $message,
             'statusCode' => $statusCode,
+            'description' => $description,
         ];
     }
 

@@ -33,7 +33,7 @@ $checkout_session = $stripe->checkout->sessions->retrieve($sessionId);
 $payment_status = $checkout_session->payment_status;
 //$expireddatetime = $checkout_session->expires_at;
 //$expired = date("Y-m-d H:i:s", substr($expireddatetime, 0, 10));
-$db->updateRecord($payment_status, $orderId);
+$db->updateRecordStatus($payment_status, $orderId);
 
 ?>
 
