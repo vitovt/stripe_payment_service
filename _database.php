@@ -133,6 +133,35 @@ class Database
         $result = $stmt->fetch();
         return $result ? $result['token'] : null;
     }
+
+	public function getRecords($fromDate = '1970-01-01', $toDate = '9999-12-31', $recordsPerPage = 0, $currentPage = 0, $sortBy = 'updated', $sortOrder = 'ASC') {
+		$offset = ($currentPage - 1) * $recordsPerPage;
+		$sortBy = in_array($sortBy, ['updated', 'id']) ? $sortBy : 'updated';
+		$sortOrder = strtoupper($sortOrder) === 'DESC' ? 'DESC' : 'ASC';
+
+		// Prepare the SQL query with placeholders
+		$sql = "SELECT id, created, updated, payment_status, description FROM orders WHERE updated BETWEEN :fromDate AND :toDate ORDER BY $sortBy $sortOrder";
+        if($recordsPerPage && $currentPage) {
+            $sql .=  "LIMIT :offset, :recordsPerPage";
+        }
+		$stmt = $this->pdo->prepare($sql);
+
+		// Bind values to the placeholders
+		$stmt->bindValue(':fromDate', $fromDate);
+		$stmt->bindValue(':toDate', $toDate);
+        if($recordsPerPage && $currentPage) {
+            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+            $stmt->bindValue(':recordsPerPage', $recordsPerPage, PDO::PARAM_INT);
+        }
+
+		$stmt->execute();
+
+		// Fetch the results
+		$results = $stmt->fetchAll();
+
+        return $results;
+	}
+
 }
 
 // Usage
