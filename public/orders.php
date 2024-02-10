@@ -131,7 +131,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $(document).ready(function() {
     $('#example').DataTable({
         "pagingType": "full_numbers", // Enables full pagination
-        "lengthMenu": [[10, 20, 50, 100, 250], [10, 20, 50, 100, 250]] // Custom length menu
+        "lengthMenu": [[10, 20, 50, 100, 250], [10, 20, 50, 100, 250]], // Custom length menu
+        "order": [[1, 'desc']],
     });
 });
 </script>
