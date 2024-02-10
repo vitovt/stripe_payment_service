@@ -140,15 +140,22 @@ class Database
 		$sortOrder = strtoupper($sortOrder) === 'DESC' ? 'DESC' : 'ASC';
 
 		// Prepare the SQL query with placeholders
-		$sql = "SELECT id, created, updated, payment_status, description FROM orders WHERE updated BETWEEN :fromDate AND :toDate ORDER BY $sortBy $sortOrder";
+		$sql = "SELECT id, created, updated, payment_status, description FROM orders WHERE updated >= :fromDate AND updated <= :toDate ORDER BY $sortBy $sortOrder";
         if($recordsPerPage && $currentPage) {
             $sql .=  "LIMIT :offset, :recordsPerPage";
         }
 		$stmt = $this->pdo->prepare($sql);
 
+		//When I specify a date without a time component (like 2024-02-10),
+		//it defaults to the beginning of that day (2024-02-10 00:00:00). 
+		//So, lets add one day after
+		$toDatePlusOne = new DateTime($toDate);
+		$toDatePlusOne->modify('+1 day');
+		$toDatePlusOne = $toDatePlusOne->format('Y-m-d');
+
 		// Bind values to the placeholders
 		$stmt->bindValue(':fromDate', $fromDate);
-		$stmt->bindValue(':toDate', $toDate);
+		$stmt->bindValue(':toDate', $toDatePlusOne);
         if($recordsPerPage && $currentPage) {
             $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
             $stmt->bindValue(':recordsPerPage', $recordsPerPage, PDO::PARAM_INT);
