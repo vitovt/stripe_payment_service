@@ -100,6 +100,7 @@ class Payment {
         $this->db->addToken($checkout_session->id, $orderId);
         $this->db->updateRecordStatus($checkout_session->payment_status, $orderId);
         $this->db->updateRecordDescription($Description, $orderId);
+        $this->db->updateRecordAmount($Amount1, $Amount2, $orderId);
         
         $redirurl =  $checkout_session->url;
         $transaction_id = $checkout_session->id;

@@ -29,6 +29,8 @@ class Database
             $this->pdo = new PDO($dsn, $user, $pass, $options);
             $this->checkAndCreateTable();
             $this->ensureColumnExists('orders', 'description', 'VARCHAR(255) DEFAULT NULL');
+            $this->ensureColumnExists('orders', 'amount2', 'SMALLINT UNSIGNED NOT NULL DEFAULT 0'); //euros
+            $this->ensureColumnExists('orders', 'amount1', 'TINYINT UNSIGNED NOT NULL DEFAULT 0'); //cents
             //$this->ensureColumnExists('orders', 'init_ip', 'VARCHAR(64) DEFAULT NULL');
         } catch (PDOException $e) {
             throw new Exception("Database connection failed: " . $e->getMessage());
@@ -107,6 +109,15 @@ class Database
         $stmt->execute([$Description, $id]);
     }
 
+    public function updateRecordAmount($Amount1, $Amount2, $id)
+    {
+        $Amount1 = (int)$Amount1;
+        $Amount2 = (int)$Amount2;
+        $query = "UPDATE orders SET amount1 = ?, amount2 = ? WHERE id = ?;"; // `updated` will be auto-updated by MySQL
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute([$Amount1, $Amount2, $id]);
+    }
+
     public function getRecordDescription($id)
     {
         $query = "SELECT description FROM orders WHERE id = ?;";
@@ -140,7 +151,7 @@ class Database
 		$sortOrder = strtoupper($sortOrder) === 'DESC' ? 'DESC' : 'ASC';
 
 		// Prepare the SQL query with placeholders
-		$sql = "SELECT id, created, updated, payment_status, description FROM orders WHERE updated >= :fromDate AND updated <= :toDate ORDER BY $sortBy $sortOrder";
+		$sql = "SELECT id, created, updated, payment_status, description, (amount1 + amount2 * 100) AS amount FROM orders WHERE updated >= :fromDate AND updated <= :toDate ORDER BY $sortBy $sortOrder";
         if($recordsPerPage && $currentPage) {
             $sql .=  "LIMIT :offset, :recordsPerPage";
         }
