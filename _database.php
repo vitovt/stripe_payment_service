@@ -31,6 +31,7 @@ class Database
             $this->ensureColumnExists('orders', 'description', 'VARCHAR(255) DEFAULT NULL');
             $this->ensureColumnExists('orders', 'amount2', 'SMALLINT UNSIGNED NOT NULL DEFAULT 0'); //euros
             $this->ensureColumnExists('orders', 'amount1', 'TINYINT UNSIGNED NOT NULL DEFAULT 0'); //cents
+            $this->ensureColumnExists('orders', 'source', 'VARCHAR(16) DEFAULT NULL'); //api vs web
             //$this->ensureColumnExists('orders', 'init_ip', 'VARCHAR(64) DEFAULT NULL');
         } catch (PDOException $e) {
             throw new Exception("Database connection failed: " . $e->getMessage());
@@ -79,11 +80,14 @@ class Database
         }
     }
 
-    public function addRecord()
+    public function addRecord($Source)
     {
-        $query = "INSERT INTO orders (token) VALUES (?);"; // Let MySQL handle `created` and `updated`
+        $Source = mb_substr(trim($Source), 0, 16, 'UTF-8');
+        $query = "INSERT INTO orders (token, source) VALUES (:token, :source);"; // Let MySQL handle `created` and `updated`
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute(['']);
+        $stmt->bindValue(':token', '', PDO::PARAM_STR);
+        $stmt->bindValue(':source', $Source, PDO::PARAM_STR);
+        $stmt->execute();
         return $this->pdo->lastInsertId();
     }
 
@@ -151,7 +155,7 @@ class Database
 		$sortOrder = strtoupper($sortOrder) === 'DESC' ? 'DESC' : 'ASC';
 
 		// Prepare the SQL query with placeholders
-		$sql = "SELECT id, created, updated, payment_status, description, (amount1 + amount2 * 100) AS amount FROM orders WHERE updated >= :fromDate AND updated <= :toDate ORDER BY $sortBy $sortOrder";
+		$sql = "SELECT id, created, updated, payment_status, description, (amount1 + amount2 * 100) AS amount, source FROM orders WHERE updated >= :fromDate AND updated <= :toDate ORDER BY $sortBy $sortOrder";
         if($recordsPerPage && $currentPage) {
             $sql .=  "LIMIT :offset, :recordsPerPage";
         }

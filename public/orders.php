@@ -2,7 +2,7 @@
 header('Content-Type: text/html; charset=utf-8');
 
 require_once '../_database.php';
-$headersArray = array('ID', 'Created', 'Updated', 'Payment Status', 'Description', 'Amount');
+$headersArray = array('ID', 'Created', 'Updated', 'Payment Status', 'Description', 'Amount', 'Source');
 $dateFrom = date('Y-m-01'); // First day of the current month
 $dateTo = date('Y-m-d'); // Current date
 

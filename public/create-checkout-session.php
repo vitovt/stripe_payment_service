@@ -18,7 +18,7 @@ if (!empty($_POST)) {
 }
 
     $payment = new Payment($stripe);
-    $result = $payment->createPayment($Amount1, $Amount2, $Description);
+    $result = $payment->createPayment($Amount1, $Amount2, $Description, 'web');
 
     if (array_key_exists('error', $result)) {
         die($result['error'] . ' <a href="javascript:history.back()">Go back</a>');

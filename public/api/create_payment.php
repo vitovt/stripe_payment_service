@@ -8,6 +8,11 @@ if (!isset($requestBody['amount1']) || !isset($requestBody['amount2']) || !isset
     exit;
 }
 
+if (isset($requestBody['source'])) {
+    $Source = $requestBody['source'];
+} else {
+    $Source = 'api';
+}
 $Amount1 = (int) $requestBody['amount1'];
 $Amount2 = (int) $requestBody['amount2'];
 $Description = $requestBody['description'];
@@ -17,7 +22,7 @@ $Description = filter_var($Description, FILTER_SANITIZE_STRING);
 
 require_once '../../_payment.php';
 $payment = new Payment($stripe);
-$result = $payment->createPayment($Amount1, $Amount2, $Description);
+$result = $payment->createPayment($Amount1, $Amount2, $Description, $Source);
 
 if (!$result) {
     http_response_code(500);

@@ -12,7 +12,7 @@ class Payment {
         $this->db = new Database();
     }
 
-    public function createPayment($Amount1, $Amount2, $Description) {
+    public function createPayment($Amount1, $Amount2, $Description, $Source = 'undefined') {
         $domain_url = $_ENV['DOMAIN'];
 
         if ($this->isValidAmount($Amount1, $Amount2)) {
@@ -39,7 +39,7 @@ class Payment {
           //'product' => $products->data[0]->id,
         ]);
 
-        $orderId = $this->db->addRecord();
+        $orderId = $this->db->addRecord($Source);
         $price_id = $price->id;
         $checkout_session = $this->stripe->checkout->sessions->create([
           'success_url' => $domain_url . '/success.php?session_id={CHECKOUT_SESSION_ID}',
